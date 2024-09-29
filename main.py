@@ -2,10 +2,9 @@ import speech_recognition as sr
 import webbrowser
 import pyttsx3
 import sys
-import datetime  # For date and time functionality
+import datetime
 import requests  # For fetching weather data
-import geocoder  # For getting device location
-import os  # For file operations
+import os
 
 recognizer = sr.Recognizer()
 engine = pyttsx3.init()
@@ -22,36 +21,60 @@ def get_date_time():
     speak(f"Current date and time is {date_time}")
     print(f"Current date and time is {date_time}")
 
-# Function to get the device location
+# Function to get the device location using ip-api.com
 def get_device_location():
-    location = geocoder.ip('me')
-    if location.ok:
-        speak(f"Your device is located at {location.city}, {location.state}, {location.country}")
-        print(f"Your device is located at {location.city}, {location.state}, {location.country}")
-    else:
-        speak("Sorry, I am unable to retrieve the location.")
+    try:
+        # Get the device's location using ip-api
+        location_url = "http://ip-api.com/json/"
+        response = requests.get(location_url)
+        location_data = response.json()
 
-# Function to get the weather forecast for the current location
-def get_weather():
-    location = geocoder.ip('me')
-    if location.ok:
-        api_key = "b6d83290e2b10dc0cba54043790fad53"  # Replace with your OpenWeatherMap API key
-        lat, lon = location.latlng
-        weather_url = f"http://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={api_key}&units=metric"
-        response = requests.get(weather_url)
-        weather_data = response.json()
-
-        if weather_data["cod"] == 200:
-            temp = weather_data['main']['temp']
-            description = weather_data['weather'][0]['description']
-            speak(f"The current temperature is {temp} degrees Celsius with {description}.")
-            print(f"The current temperature is {temp} degrees Celsius with {description}.")
+        if location_data['status'] == "success":
+            city = location_data['city']
+            region = location_data['regionName']
+            country = location_data['country']
+            speak(f"Your device is located in {city}, {region}, {country}.")
+            print(f"Your device is located in {city}, {region}, {country}.")
         else:
-            speak("Sorry, I couldn't retrieve the weather data.")
-            print("Sorry, I couldn't retrieve the weather data.")
-    else:
-        speak("Sorry, I am unable to retrieve the location for weather data.")
-        print("Sorry, I am unable to retrieve the location for weather data.")
+            speak("Sorry, I am unable to retrieve your location.")
+            print("Unable to retrieve location.")
+    except Exception as e:
+        speak(f"Error retrieving location: {str(e)}")
+        print(f"Error retrieving location: {str(e)}")
+
+# Function to get weather using ip-api for geolocation
+def get_weather():
+    try:
+        # Get the current device's geolocation using ip-api
+        location_url = "http://ip-api.com/json/"
+        location_response = requests.get(location_url)
+        location_data = location_response.json()
+        
+        if location_data['status'] == "success":
+            lat = location_data['lat']
+            lon = location_data['lon']
+            city = location_data['city']
+            
+            # Use the OpenWeatherMap API to get weather data
+            api_key = "##################"  # Replace with your OpenWeatherMap API key
+            weather_url = f"http://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={api_key}&units=metric"
+            weather_response = requests.get(weather_url)
+            weather_data = weather_response.json()
+
+            if weather_data["cod"] == 200:
+                temp = weather_data['main']['temp']
+                description = weather_data['weather'][0]['description']
+                speak(f"The current temperature in {city} is {temp} degrees Celsius with {description}.")
+                print(f"The current temperature in {city} is {temp} degrees Celsius with {description}.")
+            else:
+                speak("Sorry, I couldn't retrieve the weather data.")
+                print("Sorry, I couldn't retrieve the weather data.")
+        else:
+            speak("Sorry, I am unable to retrieve your location for weather data.")
+            print("Unable to retrieve location.")
+    except Exception as e:
+        speak(f"Error in fetching weather: {str(e)}")
+        print(f"Error: {str(e)}")
 
 # Function to read and report tasks from task_report.txt
 def get_task_report():
@@ -64,7 +87,6 @@ def get_task_report():
                     print("Here is your task report:")
                     speak(tasks)
                     print(tasks)
-        
                 else:
                     speak("Your task report is empty.")
                     print("Your task report is empty.")
@@ -94,7 +116,7 @@ def processCommand(command):
         webbrowser.open("https://linkedin.com")
     elif 'date and time' in command.lower():
         get_date_time()
-    elif 'where am i' or 'device location' in command.lower():
+    elif 'where am i' in command.lower() or 'device location' in command.lower():
         get_device_location()
     elif 'weather' in command.lower():
         get_weather()
