@@ -95,7 +95,4 @@ Feel free to contribute by opening an issue or submitting a pull request. For ma
 ## Contact:
 
 If you have any questions or feedback, feel free to reach out via email at: ashrafulmahi313@gmail.com
-## License
-
-[MIT](https://choosealicense.com/licenses/mit/)
 
