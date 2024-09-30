@@ -1,4 +1,7 @@
 
+![Logo](https://github.com/aimG313/Personal-Ai-Assistant--ALFRED/blob/main/ALFRED.png)
+
+
 # Alfred: Your Personal AI Assistant
 
 Alfred is a voice-activated AI assistant that can open various applications, provide time, date, device location, weather forecasts, and deliver task reports in both speaking and writing formats. Alfred can open Google, YouTube, LinkedIn, and Notion, making it a versatile tool for boosting your productivity.
@@ -92,3 +95,7 @@ Feel free to contribute by opening an issue or submitting a pull request. For ma
 ## Contact:
 
 If you have any questions or feedback, feel free to reach out via email at: ashrafulmahi313@gmail.com
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
+
