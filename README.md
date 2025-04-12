@@ -21,6 +21,9 @@ Alfred is a voice-activated AI assistant that can open various applications, pro
 - Weather Forcast
 - Task Report Status
 
+## Project Demo:
+- [Visit Linkedin](https://www.linkedin.com/posts/ashraful-islam-mahi_ai-python-personalassistant-activity-7246176104040783873-Fmbd?utm_source=share&utm_medium=member_desktop&rcm=ACoAAERwriAByocKi2EzeS0JwnKiNz6Jnd70_ck)
+
 
 ## Installation
 
